@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import PageContainer from '../../components/PageContainer';
 import { notifyError, notifySuccess } from '../../services/notify';
 import { request } from '../../services/utilities';
@@ -19,7 +19,6 @@ const Signup = () => {
   const submitForm = async (e) => {
     e.preventDefault();
     const values = { email, password };
-    console.log(values);
     try {
       setWaiting(true);
       const rs = await request('auth/signup', 'POST', false, values);

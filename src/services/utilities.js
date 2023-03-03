@@ -49,7 +49,6 @@ export const request = async (url, method, authed = false, data) => {
     body: JSON.stringify(data),
   });
 
-  console.log(response);
   const result = await checkStatus(response);
   return parseJSON(result);
 };

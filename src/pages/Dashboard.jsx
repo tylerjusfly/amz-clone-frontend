@@ -1,28 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectUser, checklogged } from '../features/users/userSlice';
 import Card from '../components/Card';
 import PageContainer from '../components/PageContainer';
 import Category from './admin/Category';
+import PageBreadCrumb from '../components/PageBreadCrumb';
 
 const Dashboard = ({ authed }) => {
   const user = useSelector(selectUser);
-  // const isAuthenticated = useSelector(checklogged);
 
-  // const [authenticated, setauthenticated] = useState(null);
-
-  // const [loading, setLoading] = useState(true);
-  // const navigate = useNavigate();
   console.log('userObj', user);
-
-  // useEffect(() => {
-  //   if (isAuthenticated) {
-  //     setauthenticated(user);
-  //   } else {
-  //     navigate('/');
-  //   }
-  // }, []);
 
   return (
     <PageContainer>
@@ -54,7 +42,18 @@ const Dashboard = ({ authed }) => {
           <div className="via">via Twitter</div>
         </div>
       </Card>
-      <Category />
+
+      {/* <Category /> */}
+      <div className="d-flex flex-column w-100">
+        <PageBreadCrumb>
+          <Link to="/category" className="breadcrumb-item active">
+            Category
+          </Link>
+          <Link to="#" className="breadcrumb-item">
+            DashBoard
+          </Link>
+        </PageBreadCrumb>
+      </div>
     </PageContainer>
   );
 };

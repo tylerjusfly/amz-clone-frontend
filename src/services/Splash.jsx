@@ -1,5 +1,5 @@
 const Splash = () => {
-  return <div>Loading....</div>;
+  return <div style={{ backgroundColor: 'blue' }}>Loading....</div>;
 };
 
 export default Splash;

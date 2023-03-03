@@ -6,7 +6,7 @@ import { ToastContainer } from 'react-toastify';
 // import Signup from './pages/Signup';
 const Signup = lazy(() => import('./pages/auth/Signup'));
 import Layout from './Layout';
-import Category from './pages/admin/Category';
+import Login from './pages/auth/Login';
 import RequireAuth from './pages/auth/RequireAuth';
 import Dashboard from './pages/Dashboard';
 import Splash from './services/Splash';
@@ -19,11 +19,11 @@ function App() {
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Signup />} />
+            <Route path="login" element={<Login />} />
 
             {/* Protected Routes */}
             <Route element={<RequireAuth />}>
               <Route path="home" element={<Dashboard authed={false} />} />
-              {/* <Route path="category" element={<Category />} /> */}
             </Route>
           </Route>
         </Routes>
