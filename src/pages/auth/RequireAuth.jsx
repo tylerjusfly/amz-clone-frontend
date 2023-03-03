@@ -6,10 +6,11 @@ import React from 'react';
 
 const RequireAuth = () => {
   const token = useSelector(selectUserToken);
-  // const token = localStorage.getItem('authenticated');
   const location = useLocation();
 
-  return token ? <Outlet /> : <Navigate to="/" state={{ from: location }} replace />;
+  console.log('tokenauth', token);
+
+  return token ? <Outlet /> : <Navigate to="/login" state={{ from: location }} replace />;
 };
 
 export default RequireAuth;

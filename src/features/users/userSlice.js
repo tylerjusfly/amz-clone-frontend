@@ -1,9 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { request } from '../../services/utilities';
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
 
 const initialState = {
-  user: JSON.parse(localStorage.getItem('user')) || {},
-  token: localStorage.getItem('authenticated') || null,
+  user: JSON.parse(localStorage.getItem('amzClone')) || {},
+  // user: cookies.get('AMZCOOKIE') || {},
   authenticated: false,
   errors: null,
 };
@@ -18,15 +21,14 @@ const userSlice = createSlice({
   reducers: {
     setUserCredentials: (state, action) => {
       // Destructuring user and tokens from payload
-      const { user, access_token } = action.payload;
+      const { user } = action.payload;
       state.user = user;
-      state.token = access_token;
       state.authenticated = true;
     },
     logOut: (state) => {
-      state.user = null;
-      state.token = null;
+      state.user = {};
       state.authenticated = false;
+      localStorage.removeItem('amzClone');
     },
   },
   // extraReducers(builder) {
@@ -46,9 +48,11 @@ const userSlice = createSlice({
   // },
 });
 
-export const selectUser = (state) => state.user.user;
-export const selectUserToken = (state) => state.user.token;
-export const checklogged = (state) => state.user.authenticated;
+export const selectUser = (state) => state.user.user.user; //the last user comes from the api
+export const selectUserToken = (state) => state.user.user.access_token;
+export const checkexpiresIn = (state) => state.user.user.expiresIn;
+
+export const isAuthenticated = (state) => state.user.authenticated;
 
 export const { setUserCredentials, logOut } = userSlice.actions;
 

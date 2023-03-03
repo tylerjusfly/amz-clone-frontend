@@ -1,16 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { selectUser, checklogged } from '../features/users/userSlice';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectUser, logOut } from '../features/users/userSlice';
 import Card from '../components/Card';
 import PageContainer from '../components/PageContainer';
 import Category from './admin/Category';
+import Button from '../components/Button';
 import PageBreadCrumb from '../components/PageBreadCrumb';
+import { notifySuccess } from '../services/notify';
 
 const Dashboard = ({ authed }) => {
+  const dispatch = useDispatch();
+
   const user = useSelector(selectUser);
 
   console.log('userObj', user);
+
+  const LogOutUser = () => {
+    dispatch(logOut());
+    notifySuccess('Logged out');
+  };
 
   return (
     <PageContainer>
@@ -37,13 +46,18 @@ const Dashboard = ({ authed }) => {
         </div>
         <div className="card-description">
           <p>
-            What you think, you become. What you feel, you attract. What you imagine, you create - Buddha. <a href="#">#quote</a>
+            What you think, you become. What you feel, you attract. What you imagine, you create - Buddha. <a href="#">{authed}</a>
           </p>
           <div className="via">via Twitter</div>
         </div>
+
+        {/* <Button>LogOut</Button> */}
+        <button aria-label="" className="btn btn-danger pull-right" type="submit" onClick={LogOutUser}>
+          Log Out
+        </button>
       </Card>
 
-      {/* <Category /> */}
+      <Category />
       <div className="d-flex flex-column w-100">
         <PageBreadCrumb>
           <Link to="/category" className="breadcrumb-item active">

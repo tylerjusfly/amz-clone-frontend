@@ -1,13 +1,16 @@
+import Cookies from 'universal-cookie';
+
 const API_URI = 'http://localhost:4000';
 
 const parseJSON = (response) => response.json();
+
+const cookies = new Cookies();
 
 const checkStatus = async (response) => {
   if (!response.ok) {
     if (response.statusText === 'Unauthorized') {
       // prettier-ignore
-      localStorage.removeItem("authenticated");
-      localStorage.removeItem('user');
+      localStorage.removeItem("amzClone");
 
       window.location.reload(true);
     }
@@ -39,13 +42,14 @@ const headers = (token) => {
 
 export const request = async (url, method, authed = false, data) => {
   // prettier-ignore
-  const token = localStorage.getItem("authenticated");
+  // const user = cookies.get("AMZCOOKIE");
+  const user = JSON.parse(localStorage.getItem("amzClone"));
 
-  console.log('from reqfunc', token);
+  console.log('from reqfunc', user?.access_token);
 
   const response = await fetch(`${API_URI}/${url}`, {
     method: method,
-    headers: authed ? headers(token) : { ...defaultHeaders },
+    headers: authed ? headers(user.access_token) : { ...defaultHeaders },
     body: JSON.stringify(data),
   });
 

@@ -25,15 +25,13 @@ const Signup = () => {
       console.log(rs);
 
       if (rs.type === 'Success') {
-        localStorage.setItem('authenticated', rs.access_token);
-        localStorage.setItem('user', JSON.stringify(rs.user));
+        localStorage.setItem('amzClone', JSON.stringify(rs.result));
+        dispatch(setUserCredentials({ user: rs.result }));
         notifySuccess('user Registered');
         setWaiting(false);
-        dispatch(setUserCredentials({ user: rs.user, access_token: rs.access_token }));
         navigate('/home');
       } else {
         notifyError(rs.message);
-        console.log('ERR WAS CALLED FROM ELSE');
         console.log('ERR', rs?.message);
         setWaiting(false);
       }

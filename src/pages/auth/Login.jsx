@@ -6,9 +6,13 @@ import { useDispatch } from 'react-redux';
 import { setUserCredentials } from '../../features/users/userSlice';
 import { request } from '../../services/utilities';
 
+import Cookies from 'universal-cookie';
+import jwt from 'jwt-decode';
+
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const cookies = new Cookies();
 
   const [waiting, setWaiting] = useState(false);
   const [userName, setUserName] = useState('');
@@ -23,11 +27,20 @@ const Login = () => {
       console.log(rs);
 
       if (rs.type === 'Success') {
-        localStorage.setItem('authenticated', rs.access_token);
-        localStorage.setItem('user', JSON.stringify(rs.user));
+        // Decode JWT
+        // const { result } = rs;
+
+        // const decoded = jwt(result.access_token);
+
+        // // SetCookies
+        // cookies.set('AMZCOOKIE', result, {
+        //   expires: new Date(decoded.exp * 1000),
+        // });
+
+        localStorage.setItem('amzClone', JSON.stringify(rs.result));
+        dispatch(setUserCredentials({ user: rs.result }));
         notifySuccess('Login successful');
         setWaiting(false);
-        dispatch(setUserCredentials({ user: rs.user, access_token: rs.access_token }));
         navigate('/home');
       } else {
         notifyError(rs.message);
