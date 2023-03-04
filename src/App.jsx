@@ -16,6 +16,8 @@ import Splash from './services/Splash';
 
 import { useIdleTimer } from 'react-idle-timer';
 import { notifySuccess } from './services/notify';
+import Category from './pages/admin/Category';
+import RequiredRoles from './pages/admin/RequiredRoles';
 
 function App() {
   const dispatch = useDispatch();
@@ -51,10 +53,15 @@ function App() {
           <Route path="/" element={<Layout />}>
             <Route index element={<Signup />} />
             <Route path="login" element={<Login />} />
-
+            <Route path="unauth" element={<div>No Access</div>} />
             {/* Protected Routes */}
-            <Route element={<RequireAuth />}>
-              <Route path="home" element={<Dashboard authed={remain} />} />
+            <Route path="home" element={<RequireAuth />}>
+              <Route index element={<Dashboard authed={remain} />} />
+
+              {/* Admin Routes */}
+              <Route element={<RequiredRoles requiredRole={['admin']} />}>
+                <Route path="category" element={<Category />} />
+              </Route>
             </Route>
           </Route>
         </Routes>

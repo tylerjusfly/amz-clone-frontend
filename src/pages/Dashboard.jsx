@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectUser, logOut } from '../features/users/userSlice';
 import Card from '../components/Card';
@@ -13,8 +13,6 @@ const Dashboard = ({ authed }) => {
   const dispatch = useDispatch();
 
   const user = useSelector(selectUser);
-
-  console.log('userObj', user);
 
   const LogOutUser = () => {
     dispatch(logOut());
@@ -56,18 +54,6 @@ const Dashboard = ({ authed }) => {
           Log Out
         </button>
       </Card>
-
-      <Category />
-      <div className="d-flex flex-column w-100">
-        <PageBreadCrumb>
-          <Link to="/category" className="breadcrumb-item active">
-            Category
-          </Link>
-          <Link to="#" className="breadcrumb-item">
-            DashBoard
-          </Link>
-        </PageBreadCrumb>
-      </div>
     </PageContainer>
   );
 };

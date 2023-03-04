@@ -58,21 +58,7 @@ const Signup = () => {
               </p>
               <form onSubmit={submitForm}>
                 {/* <div className="row clearfix">
-                  <div className="col-xl-6">
-                    <div className="form-group form-group-default">
-                      <label>First name</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        name="firstName"
-                        required=""
-                        aria-required="true"
-                        onChange={(e) => {
-                          setFirstname(e.target.value);
-                        }}
-                      />
-                    </div>
-                  </div>
+                  
                   <div className="col-xl-6">
                     <div className="form-group form-group-default">
                       <label>Last name</label>

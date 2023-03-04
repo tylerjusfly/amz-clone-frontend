@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { selectUserToken } from '../../features/users/userSlice';
 
 import React from 'react';
+import DashBoardNav from '../../components/DashBoardNav';
 
 const RequireAuth = () => {
   const token = useSelector(selectUserToken);
@@ -10,7 +11,14 @@ const RequireAuth = () => {
 
   console.log('tokenauth', token);
 
-  return token ? <Outlet /> : <Navigate to="/login" state={{ from: location }} replace />;
+  return token ? (
+    <>
+      <DashBoardNav />
+      <Outlet />
+    </>
+  ) : (
+    <Navigate to="/login" state={{ from: location }} replace />
+  );
 };
 
 export default RequireAuth;

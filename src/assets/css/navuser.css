@@ -1,0 +1,27 @@
+.navbar {
+  background-color: powderblue;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  height: 80px;
+}
+
+.navbar img {
+  margin-bottom: 7px;
+  align-self: center;
+}
+
+.navbar ul {
+  display: flex;
+}
+
+.navbar ul a {
+  position: relative;
+  list-style-type: none;
+  margin: 0 15px;
+}
+
+.navbar ul a:hover {
+  color: black;
+  transition: 0.4s;
+}
