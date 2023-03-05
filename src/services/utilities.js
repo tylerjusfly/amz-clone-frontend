@@ -1,17 +1,12 @@
-import Cookies from 'universal-cookie';
-
 const API_URI = 'http://localhost:4000';
 
 const parseJSON = (response) => response.json();
-
-const cookies = new Cookies();
 
 const checkStatus = async (response) => {
   if (!response.ok) {
     if (response.statusText === 'Unauthorized') {
       // prettier-ignore
       localStorage.removeItem("amzClone");
-
       window.location.reload(true);
     }
 
@@ -45,8 +40,6 @@ export const request = async (url, method, authed = false, data) => {
   // const user = cookies.get("AMZCOOKIE");
   const user = JSON.parse(localStorage.getItem("amzClone"));
 
-  console.log('from reqfunc', user?.access_token);
-
   const response = await fetch(`${API_URI}/${url}`, {
     method: method,
     headers: authed ? headers(user.access_token) : { ...defaultHeaders },
@@ -55,4 +48,16 @@ export const request = async (url, method, authed = false, data) => {
 
   const result = await checkStatus(response);
   return parseJSON(result);
+};
+
+export const updateImmutable = (list, payload) => {
+  const data = list.find((d) => d.id === payload.id);
+  console.log('Immutable', data);
+  if (data) {
+    const index = list.findIndex((d) => d.id === payload.id);
+
+    return [...list.slice(0, index), { ...data, ...payload }, ...list.slice(index + 1)];
+  }
+
+  return list;
 };

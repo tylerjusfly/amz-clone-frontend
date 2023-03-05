@@ -6,13 +6,11 @@ import { useDispatch } from 'react-redux';
 import { setUserCredentials } from '../../features/users/userSlice';
 import { request } from '../../services/utilities';
 
-import Cookies from 'universal-cookie';
 import jwt from 'jwt-decode';
 
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const cookies = new Cookies();
 
   const [waiting, setWaiting] = useState(false);
   const [userName, setUserName] = useState('');

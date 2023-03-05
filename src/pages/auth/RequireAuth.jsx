@@ -9,8 +9,6 @@ const RequireAuth = () => {
   const token = useSelector(selectUserToken);
   const location = useLocation();
 
-  console.log('tokenauth', token);
-
   return token ? (
     <>
       <DashBoardNav />

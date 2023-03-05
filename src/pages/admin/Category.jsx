@@ -1,25 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { notifyError, notifySuccess } from '../../services/notify';
-import { request } from '../../services/utilities';
+import { request, updateImmutable } from '../../services/utilities';
 import Button from '../../components/Button';
 import PageContainer from '../../components/PageContainer';
 import Label from '../../components/Label';
 import Input from '../../components/Input';
 import TableLoading from '../../components/TableLoading';
 import moment from 'moment/moment';
+import Icon from '../../components/Icon';
 
 const Category = () => {
   const [categoryName, setCategoryName] = useState('');
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  console.log(categories);
+  console.log('=>>', categories);
 
   const createCategory = async () => {
     try {
       const rs = await request('products/category/create', 'POST', true, { name: categoryName });
       if (rs.type === 'Success') {
         console.log(rs);
+        setCategoryName('');
         notifySuccess('category successfully created');
       } else {
         notifyError(rs.message);
@@ -29,15 +31,35 @@ const Category = () => {
     }
   };
 
-  const getAllCategory = async () => {
+  const getAllCategory = useCallback(async () => {
     try {
-      const url = 'products/category/all';
+      const url = `products/category/all`;
+
       const rs = await request(url, 'GET', true);
       if (rs.type === 'Success') {
         setCategories(rs.result);
       }
     } catch (error) {
       notifyError(error.message || 'error fetching categories');
+    }
+  }, []);
+
+  const deleteOne = async (item) => {
+    const deleteUrl = `products/category/delete/?cid=${item.id}`;
+    try {
+      const rs = await request(deleteUrl, 'DELETE', true);
+      if (rs.type === 'Success') {
+        notifySuccess('delete Success');
+
+        const updatedCategories = updateImmutable(categories, item);
+
+        console.log('delete>>', updatedCategories);
+        setCategories(updatedCategories);
+      } else {
+        notifyError(rs.message || 'delete failed');
+      }
+    } catch (error) {
+      notifyError(error.message || 'category unable to delete');
     }
   };
 
@@ -46,18 +68,24 @@ const Category = () => {
       getAllCategory();
       setLoading(false);
     }
-  }, []);
+  }, [categories]);
 
   return (
     <PageContainer>
       <div className="col-md-4">
         <div className="form-group">
           <Label className="label-md">Category</Label>
-          <Input type="text" placeholder="Create A Product Category" className="form-control input-md" onChange={(e) => setCategoryName(e.target.value)} />
+          <Input
+            type="text"
+            placeholder="Create A Product Category"
+            className="form-control input-md"
+            onChange={(e) => setCategoryName(e.target.value)}
+            value={categoryName}
+          />
         </div>
       </div>
       <Button type="primary" utilclass="m-r-5 m-b-10" iconposition="left" onClick={createCategory}>
-        <i className="pg-icon">tick</i>
+        <Icon>tick</Icon>
         <span className="">Submit</span>
       </Button>
 
@@ -87,6 +115,9 @@ const Category = () => {
                           <th style={{ width: '165px' }} className="sorting_disabled" rowSpan="1" colSpan="1">
                             Last Update
                           </th>
+                          <th style={{ width: '80px' }} className="sorting_disabled" rowSpan="1" colSpan="1">
+                            actions
+                          </th>
                         </tr>
                       </thead>
                       <tbody>
@@ -95,6 +126,15 @@ const Category = () => {
                             <td className="v-align-middle semi-bold">{item.name}</td>
                             <td className="v-align-middle semi-bold">{item.slug}</td>
                             <td className="v-align-middle">{moment(item.createdAt).format('DD-MM-YYYY')}</td>
+                            <td>
+                              <span
+                                onClick={() => {
+                                  deleteOne(item);
+                                }}
+                              >
+                                <Icon>bin</Icon>
+                              </span>
+                            </td>
                           </tr>
                         ))}
                       </tbody>

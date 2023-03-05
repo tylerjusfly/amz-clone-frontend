@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { isAuthenticated, logOut } from './features/users/userSlice';
 import moment from 'moment';
@@ -18,6 +18,9 @@ import { useIdleTimer } from 'react-idle-timer';
 import { notifySuccess } from './services/notify';
 import Category from './pages/admin/Category';
 import RequiredRoles from './pages/admin/RequiredRoles';
+import MyProduct from './pages/personalized/MyProduct';
+
+import parseJwt from 'jwt-decode';
 
 function App() {
   const dispatch = useDispatch();
@@ -25,6 +28,7 @@ function App() {
   const authenticated = useSelector(isAuthenticated);
 
   const [remain, setRemaining] = useState(0);
+
   const onIdle = () => {
     // Do some idle action like log out your user
     if (authenticated) {
@@ -35,15 +39,21 @@ function App() {
 
   const { isIdle, getRemainingTime } = useIdleTimer({ onIdle, timeout: 3600 * 1000 });
 
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     setRemaining(Math.ceil(getRemainingTime() / 1000));
-  //   }, 500);
+  // const interval = setInterval(() => {
+  //   console.log('call interval');
+  //   setRemaining(remain + 1);
+  // }, 1000);
 
-  //   return () => {
-  //     clearInterval(interval);
-  //   };
-  // });
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('amzClone'));
+    if (user) {
+      const decodedJwt = parseJwt(user.access_token);
+      if (decodedJwt.exp * 1000 < Date.now()) {
+        onIdle();
+      }
+      console.log(decodedJwt);
+    }
+  }, [remain]);
 
   return (
     <div>
@@ -57,6 +67,7 @@ function App() {
             {/* Protected Routes */}
             <Route path="home" element={<RequireAuth />}>
               <Route index element={<Dashboard authed={remain} />} />
+              <Route path="my-product" element={<MyProduct />} />
 
               {/* Admin Routes */}
               <Route element={<RequiredRoles requiredRole={['admin']} />}>

@@ -18,8 +18,6 @@ const DashBoardNav = () => {
 
   const user = useSelector(selectUser);
 
-  console.log('fromcontext', user);
-
   return (
     <nav className="navbar">
       <img src="https://kitpro.site/demed/wp-content/uploads/sites/47/2021/10/logo-demed.png" height="40px" alt="" />
@@ -33,10 +31,10 @@ const DashBoardNav = () => {
           </NavLink>
         )}
 
-        <NavLink to="/" style={setNavToActive}>
-          Services
+        <NavLink to="my-product" style={setNavToActive}>
+          My Products
         </NavLink>
-        <NavLink to="/blog" style={setNavToActive}>
+        <NavLink to="/my-product" style={setNavToActive}>
           Blog
         </NavLink>
         <NavLink to="/" style={setNavToActive}>
